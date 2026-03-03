@@ -1,11 +1,13 @@
 import { test as base } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { ProductsPage } from '../pages/ProductsPage';
+import { CartPage } from '../pages/CartPage';
 
 //sayfa nesnelerini içeren bir fixture oluşturuyoruz
 type MyFixtures = {
     loginPage: LoginPage;
     productsPage: ProductsPage;
+    cartPage: CartPage;
 }
 
 //Playwright'in test fonksiyonunu genişleterek kendi fixture'ımızı ekliyoruz
@@ -55,6 +57,11 @@ export const test = base.extend<MyFixtures>({
     productsPage: async ({ page }, use) => {
         const productsPage = new ProductsPage(page);
         await use(productsPage);
+    },
+    //cartPage fixture'ını tanımlıyoruz
+    cartPage: async ({ page }, use) => {
+        const cartPage = new CartPage(page);
+        await use(cartPage);
     },
 });
 

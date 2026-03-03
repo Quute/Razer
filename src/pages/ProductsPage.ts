@@ -33,7 +33,7 @@ export class ProductsPage {
         this.searchButton = page.locator('button#submit_search');
 
         // Arama işleminden sonra ortaya çıkan başlık. text-center class'ına sahip h2 tag'i tespit edildi.
-        this.searchedProductsHeader = page.locator('h2.title.text-center');
+        this.searchedProductsHeader = page.locator('h2.title.text-center').filter({ hasText: 'Searched Products' });
 
         // Ürün listesinde ilk ürünün 'View Product' linkini yakalamak için (daha stabil css kullanımı)
         this.firstProductViewLink = page.locator('.choose a').first();
