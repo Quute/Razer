@@ -8,13 +8,13 @@ export class ProductsPage {
     readonly searchedProductsHeader: Locator;
     readonly firstProductViewLink: Locator;
 
-    // Ürün Detay Sayfası Elementleri
+    // Product Detail Page Elements
     readonly productName: Locator;
     readonly productCategory: Locator;
     readonly productPrice: Locator;
     readonly productAvailability: Locator;
 
-    // Sepet Etkileşimi Elementleri
+    // Cart Interaction Elements
     readonly quantityInput: Locator;
     readonly addToCartButton: Locator;
     readonly viewCartModalLink: Locator;
@@ -22,74 +22,74 @@ export class ProductsPage {
     constructor(page: Page) {
         this.page = page;
 
-        // --- Navigasyon ve Arama Locator'ları ---
-        // Üst menüdeki 'Products' linkini, href niteliği ile buluyoruz (unicode boşluklardan kaçınıyoruz).
+        // --- Navigation and Search Locators ---
+        // We find the 'Products' link in the top menu by its href attribute (avoiding unicode spaces).
         this.productsMenuLink = page.locator('a[href="/products"]');
 
-        // Arama kutusu için id selector'ü kullanıldı.
+        // 'id' selector is used for the search box.
         this.searchInput = page.locator('input#search_product');
 
-        // Arama butonu için id selector'ü kullanıldı.
+        // 'id' selector is used for the search button.
         this.searchButton = page.locator('button#submit_search');
 
-        // Arama işleminden sonra ortaya çıkan başlık. text-center class'ına sahip h2 tag'i tespit edildi.
+        // The title that appears after a search operation. The h2 tag with the text-center class was detected.
         this.searchedProductsHeader = page.locator('h2.title.text-center').filter({ hasText: 'Searched Products' });
 
-        // Ürün listesinde ilk ürünün 'View Product' linkini yakalamak için (daha stabil css kullanımı)
+        // To capture the 'View Product' link of the first product in the product list (more stable css usage)
         this.firstProductViewLink = page.locator('.choose a').first();
 
-        // --- Ürün Detay Sayfası Locator'ları ---
-        // Ürün detay sayfasındaki ürün ismi h2 olarak bulunur.
+        // --- Product Detail Page Locators ---
+        // The product name on the product detail page is found as h2.
         this.productName = page.locator('.product-information h2');
 
-        // Ürün kategorisi içinde 'Category' metni geçen paragraf (p) olarak bulunur.
+        // Found as a paragraph (p) containing the text 'Category' within the product category.
         this.productCategory = page.locator("xpath=//p[contains(text(), 'Category')]");
 
-        // Ürün fiyatını bulmak için class yapısı yerine hiyerarşik span kullanımı.
+        // Hierarchical span usage instead of class structure to find the product price.
         this.productPrice = page.locator('span > span').first();
 
-        // Stok durumunu (Availability) bulmak için contains metodu.
+        // 'contains' method to find Availability status.
         this.productAvailability = page.locator("xpath=//p[contains(., 'Availability:')]");
 
-        // --- Sepet Etkileşim Elementleri ---
-        // Adet giriş alanı id'si quantity
+        // --- Cart Interaction Elements ---
+        // Quantity input field id is quantity
         this.quantityInput = page.locator('#quantity');
-        // 'Add to cart' butonu classı cart
+        // 'Add to cart' button class is cart
         this.addToCartButton = page.locator('button.cart');
-        // Sepete ekledikten sonra çıkan pop-up modal içerisindeki 'View Cart' linki
+        // The 'View Cart' link inside the pop-up modal that appears after adding to the cart
         this.viewCartModalLink = page.locator('#cartModal a[href="/view_cart"]');
     }
 
-    // 1. Ürünler sayfasına menüden gitme metodu
+    // 1. Navigate to products page from menu method
     async navigateToProducts() {
         await this.productsMenuLink.click();
     }
 
-    // 2. Ürün arama işlemini tek fonksiyonda toplayan metot
+    // 2. Method that combines product search operation in a single function
     async searchProduct(productName: string) {
         await this.searchInput.fill(productName);
         await this.searchButton.click();
     }
 
-    // 3. İlk çıkan ürünün detaylarına gitme metodu
+    // 3. Navigate to the details of the first appeared product method
     async viewFirstProduct() {
-        // baseTest içindeki global route blocking (reklam engelleme) sayesinde artık reklamlar DOM'u kaydırmıyor.
-        // O yüzden en stabil olan normal click metodunu güvenle kullanabiliriz.
+        // Thanks to global route blocking (ad blocking) in baseTest, ads no longer cause DOM shifts.
+        // Therefore, we can safely use the most stable default click method.
         await this.firstProductViewLink.click();
     }
 
-    // 4. Detay sayfasında ürün miktarını ayarlama
+    // 4. Set product quantity on detail page
     async setQuantity(quantity: string) {
-        // Girdi alanının içeriğini temizle ve yeni miktarı gir
+        // Clear the input field content and enter new quantity
         await this.quantityInput.fill(quantity);
     }
 
-    // 5. 'Add to Cart' butonuna tıklama
+    // 5. Click the 'Add to Cart' button
     async addToCart() {
         await this.addToCartButton.click();
     }
 
-    // 6. Sepete eklendi onay pop-up'ından 'View Cart'a gitme
+    // 6. Navigate to 'View Cart' from added to cart confirmation pop-up
     async viewCartFromModal() {
         await this.viewCartModalLink.click();
     }

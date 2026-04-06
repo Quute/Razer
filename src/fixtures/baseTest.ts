@@ -7,7 +7,7 @@ import { CheckoutPage } from '../pages/CheckoutPage';
 import { PaymentPage } from '../pages/PaymentPage';
 import { PaymentSuccessPage } from '../pages/PaymentSuccessPage';
 
-//sayfa nesnelerini içeren bir fixture oluşturuyoruz
+// Create a fixture containing page objects
 type MyFixtures = {
     loginPage: LoginPage;
     productsPage: ProductsPage;
@@ -18,12 +18,12 @@ type MyFixtures = {
     paymentSuccessPage: PaymentSuccessPage;
 }
 
-//Playwright'in test fonksiyonunu genişleterek kendi fixture'ımızı ekliyoruz
+// Extend Playwright's test function to add our custom fixture
 export const test = base.extend<MyFixtures>({
 
     // Global Page Fixture overrides to block Ads
     page: async ({ page }, use) => {
-        // Reklam ve analiz ağ isteklerini (network requests) iptal ederek sayfa yüklemesini hızlandırıp kaymaları önlüyoruz
+        // Cancel ad and analytics network requests to speed up page load and prevent layout shifts
         await page.route('**/*', (route) => {
             const blockedDomains = [
                 'googleads.g.doubleclick.net',
@@ -37,56 +37,56 @@ export const test = base.extend<MyFixtures>({
 
             const url = route.request().url();
             if (blockedDomains.some(domain => url.includes(domain))) {
-                route.abort(); // Reklam isteğini engelle
+                route.abort(); // Block ad request
             } else {
-                route.continue(); // Diğer isteklere izin ver
+                route.continue(); // Allow other requests
             }
         });
 
-        // DOM seviyesinde çıkabilecek reklam veya consent (onay) pencerelerini gizleyen/silen script enjekte ediyoruz
+        // Inject script to hide/remove ad or consent modals at the DOM level
         await page.addInitScript(() => {
-            // Sayfa yüklendiğinde ve belli aralıklarla reklam containerlarını temizle
+            // Clear ad containers when page loads and periodically
             setInterval(() => {
                 const adsAndModals = document.querySelectorAll('.fc-dialog-container, iframe[id^="aswift"], iframe[name^="aswift"], .adsbygoogle');
                 adsAndModals.forEach(el => el.remove());
-            }, 500); // Her yarım saniyede bir kontrol edip sil
+            }, 500); // Check and remove every half second
         });
 
         await use(page);
     },
 
-    //loginPage fixture'ını tanımlıyoruz
+    // Define loginPage fixture
     loginPage: async ({ page }, use) => {
-        //Sayfayı oluştur ve kullanıma hazır hale getir
+        // Create the page object and make it ready to use
         const loginPage = new LoginPage(page);
         await use(loginPage);
     },
-    //productsPage fixture'ını tanımlıyoruz
+    // Define productsPage fixture
     productsPage: async ({ page }, use) => {
         const productsPage = new ProductsPage(page);
         await use(productsPage);
     },
-    //cartPage fixture'ını tanımlıyoruz
+    // Define cartPage fixture
     cartPage: async ({ page }, use) => {
         const cartPage = new CartPage(page);
         await use(cartPage);
     },
-    //homePage fixture'ını tanımlıyoruz
+    // Define homePage fixture
     homePage: async ({ page }, use) => {
         const homePage = new HomePage(page);
         await use(homePage);
     },
-    //checkoutPage fixture'ını tanımlıyoruz
+    // Define checkoutPage fixture
     checkoutPage: async ({ page }, use) => {
         const checkoutPage = new CheckoutPage(page);
         await use(checkoutPage);
     },
-    //paymentPage fixture'ını tanımlıyoruz
+    // Define paymentPage fixture
     paymentPage: async ({ page }, use) => {
         const paymentPage = new PaymentPage(page);
         await use(paymentPage);
     },
-    //paymentSuccessPage fixture'ını tanımlıyoruz
+    // Define paymentSuccessPage fixture
     paymentSuccessPage: async ({ page }, use) => {
         const paymentSuccessPage = new PaymentSuccessPage(page);
         await use(paymentSuccessPage);

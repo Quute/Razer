@@ -4,7 +4,7 @@ test.describe('Kullanıcı Kimlik Doğrulama Testleri', () => {
   test('Login sayfası öğeleri görünür olmalı', async ({ loginPage }) => {
     await loginPage.navigate();
 
-    //loginPage fixture'ı sayesinde nesne otomatik olarak oluşturulur.
+    // loginPage fixture automatically creates the object.
     await expect(loginPage.emailInput).toBeVisible();
     await expect(loginPage.loginButton).toBeVisible();
   });
@@ -13,8 +13,8 @@ test.describe('Kullanıcı Kimlik Doğrulama Testleri', () => {
     await loginPage.navigate();
     await loginPage.login('invalid@example.com', 'wrongpassword');
 
-    //Hata mesajının görünür olduğunu doğrula
-    const errorMessage = loginPage.page.locator('//*[@id="form"]/div/div/div[1]/div/form/p'); //Hata mesajı için uygun locator'ı kullanın
+    // Verify error message is visible
+    const errorMessage = loginPage.page.locator('//*[@id="form"]/div/div/div[1]/div/form/p'); // Use appropriate locator for error message
     await expect(errorMessage).toBeVisible();
   });
 
@@ -22,8 +22,8 @@ test.describe('Kullanıcı Kimlik Doğrulama Testleri', () => {
     await loginPage.navigate();
     await loginPage.login('bqyilmaz2@gmail.com', '123456');
 
-    //Başarılı login sonrası kullanıcı adının görünür olduğunu doğrula
-    const userName = loginPage.page.locator('//*[@id="header"]/div/div/div/div[2]/div/ul/li[10]/a/b'); //Kullanıcı adı için uygun locator'ı kullanın
+    // Verify username is visible after successful login
+    const userName = loginPage.page.locator('//*[@id="header"]/div/div/div/div[2]/div/ul/li[10]/a/b'); // Use appropriate locator for username
     await expect(userName).toBeVisible();
   });
 });

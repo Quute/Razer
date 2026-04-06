@@ -17,7 +17,7 @@ export class LoginPage {
         this.loginButton = page.locator('[data-qa="login-button"]');
         this.loginHeader = page.locator('[data-qa="login-header"]');
         
-        // Eğer Signup kısmını da eklediysen:
+        // If you also added the Signup part:
         this.signupNameInput = page.locator('[data-qa="signup-name"]');
         this.signupEmailInput = page.locator('[data-qa="signup-email"]');
         this.signupButton = page.locator('[data-qa="signup-button"]');

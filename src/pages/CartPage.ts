@@ -3,53 +3,53 @@ import { Locator, Page } from "@playwright/test";
 export class CartPage {
     readonly page: Page;
 
-    // Sepet tablosu ana kapsayıcısı
+    // Cart table main container
     readonly cartInfoTable: Locator;
 
-    // Sepet tablosu satırları (her bir ürün)
+    // Cart table rows (each product)
     readonly cartRows: Locator;
 
-    // Checkout butonu
+    // Checkout button
     readonly proceedToCheckoutBtn: Locator;
 
-    // Checkout Modal Pop-up Locators (Kayıt ol/Giriş yap uyarısı)
+    // Checkout Modal Pop-up Locators (Register/Login warning)
     readonly checkoutModalRegisterLoginLink: Locator;
 
-    // Sepeti temizleme butonu
+    // Clear cart button
     readonly deleteButtons: Locator;
 
-    // Sepet boş uyarısı
+    // Empty cart warning
     readonly emptyCartMessage: Locator;
 
     constructor(page: Page) {
         this.page = page;
 
-        // Sepet tablosu genel
+        // General cart table
         this.cartInfoTable = page.locator('#cart_info_table');
 
-        // Sepetteki ürün satırlarını seçmek için
+        // To select product rows in the cart
         this.cartRows = page.locator('#cart_info_table tbody tr');
 
-        // Ödeme adımına geç butonu
+        // Proceed to checkout button
         this.proceedToCheckoutBtn = page.locator('.check_out');
 
-        // Checkout sırasında kullanıcı giriş yapmamışsa çıkan modal içindeki link
+        // Link inside the modal that appears during checkout if the user is not logged in
         this.checkoutModalRegisterLoginLink = page.locator('#checkoutModal a[href="/login"]');
 
-        // Her bir ürünü silme butonu
+        // Delete button for each product
         this.deleteButtons = page.locator('.cart_quantity_delete');
 
-        // Sepet boş olduğunda çıkan mesaj
+        // Message that appears when the cart is empty
         this.emptyCartMessage = page.locator('#empty_cart p.text-center');
     }
 
-    // Sepette ürün olup olmadığını döndüren metot
+    // Method that returns the number of items in the cart
     async getCartItemCount(): Promise<number> {
         return await this.cartRows.count();
     }
 
-    // Belirli bir indeksteki (0'dan başlayan) ürün elementleri için yardımcı locatorlar döndüren metotlar
-    // İleride detaylı kontroller için eklenebilir veya metot içinde kullanılabilir.
+    // Methods that return helper locators for product elements at a specific index (0-indexed)
+    // Can be added for detailed checks later or used within methods.
 
     getProductNameLocator(index: number): Locator {
         return this.cartRows.nth(index).locator('td.cart_description h4 a');
@@ -67,12 +67,12 @@ export class CartPage {
         return this.cartRows.nth(index).locator('td.cart_total p.cart_total_price');
     }
 
-    // Ödeme aşamasına (Checkout) geç metodu
+    // Proceed to Checkout method
     async proceedToCheckout() {
         await this.proceedToCheckoutBtn.click();
     }
 
-    // Belirli bir ürünü sepetten silme metodu
+    // Method to delete a specific product from the cart
     async deleteProductFromCart(index: number) {
         await this.deleteButtons.nth(index).click();
     }
