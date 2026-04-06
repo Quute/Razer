@@ -3,6 +3,9 @@ import { LoginPage } from '../pages/LoginPage';
 import { ProductsPage } from '../pages/ProductsPage';
 import { CartPage } from '../pages/CartPage';
 import { HomePage } from '../pages/HomePage';
+import { CheckoutPage } from '../pages/CheckoutPage';
+import { PaymentPage } from '../pages/PaymentPage';
+import { PaymentSuccessPage } from '../pages/PaymentSuccessPage';
 
 //sayfa nesnelerini içeren bir fixture oluşturuyoruz
 type MyFixtures = {
@@ -10,6 +13,9 @@ type MyFixtures = {
     productsPage: ProductsPage;
     cartPage: CartPage;
     homePage: HomePage;
+    checkoutPage: CheckoutPage;
+    paymentPage: PaymentPage;
+    paymentSuccessPage: PaymentSuccessPage;
 }
 
 //Playwright'in test fonksiyonunu genişleterek kendi fixture'ımızı ekliyoruz
@@ -70,7 +76,21 @@ export const test = base.extend<MyFixtures>({
         const homePage = new HomePage(page);
         await use(homePage);
     },
+    //checkoutPage fixture'ını tanımlıyoruz
+    checkoutPage: async ({ page }, use) => {
+        const checkoutPage = new CheckoutPage(page);
+        await use(checkoutPage);
+    },
+    //paymentPage fixture'ını tanımlıyoruz
+    paymentPage: async ({ page }, use) => {
+        const paymentPage = new PaymentPage(page);
+        await use(paymentPage);
+    },
+    //paymentSuccessPage fixture'ını tanımlıyoruz
+    paymentSuccessPage: async ({ page }, use) => {
+        const paymentSuccessPage = new PaymentSuccessPage(page);
+        await use(paymentSuccessPage);
+    },
 });
 
 export { expect } from '@playwright/test';
-
