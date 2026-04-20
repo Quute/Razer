@@ -1,6 +1,6 @@
 import { test, expect } from '../src/fixtures/baseTest';
 
-test.describe('TC1 - Register User', () => {
+test.describe('Kullanıcı Kayıt Testleri', () => {
 
     test('Yeni kullanıcı kaydı başarılı olmalı ve hesap silinebilmeli', async ({ loginPage, signupPage, page }) => {
         const uniqueEmail = `user_${Date.now()}@test.com`;
