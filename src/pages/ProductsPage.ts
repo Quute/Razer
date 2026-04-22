@@ -18,6 +18,11 @@ export class ProductsPage {
     readonly quantityInput: Locator;
     readonly addToCartButton: Locator;
     readonly viewCartModalLink: Locator;
+    readonly continueShoppingButton: Locator;
+    readonly cartModal: Locator;
+
+    // Product List Elements (used for TC12 multi-add)
+    readonly productCards: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -58,6 +63,15 @@ export class ProductsPage {
         this.addToCartButton = page.locator('button.cart');
         // The 'View Cart' link inside the pop-up modal that appears after adding to the cart
         this.viewCartModalLink = page.locator('#cartModal a[href="/view_cart"]');
+
+        // 'Continue Shopping' button inside the cart modal
+        this.continueShoppingButton = page.locator('#cartModal button.close-modal');
+
+        // Cart modal container (used to wait for hidden state after closing)
+        this.cartModal = page.locator('#cartModal');
+
+        // Product cards on the /products list page
+        this.productCards = page.locator('.features_items .product-image-wrapper');
     }
 
     // 1. Navigate to products page from menu method
@@ -98,5 +112,22 @@ export class ProductsPage {
         // Wait for the modal's view-cart link to be visible (Bootstrap fade completes)
         await this.viewCartModalLink.waitFor({ state: 'visible', timeout: 15000 });
         await this.viewCartModalLink.click();
+    }
+
+    // 7. Add a product to cart from the product list page by index (0-based).
+    //    Each product card has two add-to-cart links (base + hover overlay); hovering
+    //    surfaces the overlay one which is the intended click target per TC12.
+    async addProductToCartByIndex(index: number) {
+        const card = this.productCards.nth(index);
+        await card.scrollIntoViewIfNeeded();
+        await card.hover();
+        await card.locator('.product-overlay .add-to-cart').first().click();
+    }
+
+    // 8. Dismiss the cart confirmation modal via 'Continue Shopping' and wait for it to hide.
+    async continueShopping() {
+        await this.continueShoppingButton.waitFor({ state: 'visible', timeout: 15000 });
+        await this.continueShoppingButton.click();
+        await this.cartModal.waitFor({ state: 'hidden', timeout: 15000 });
     }
 }

@@ -64,7 +64,7 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 
 - [x] **TC4: Logout User** — `tests/logout.spec.ts` yazıldı. `HomePage.logoutLink` + `logout()` eklendi. Yeşil.
 - [x] **TC9: Search Product** — `tests/searchProduct.spec.ts` yazıldı. Google vignette interstitial bypass'ı ile stabilize edildi (`#google_vignette` check + URL fallback). Yeşil.
-- [ ] **TC12: Add Multiple Products in Cart** — Mevcut test tek ürün ekliyor. Multi-row cart davranışı test edilmiyor.
+- [x] **TC12: Add Multiple Products in Cart** — `tests/multipleCart.spec.ts` yazıldı. `ProductsPage`'e `productCards`, `addProductToCartByIndex()`, `continueShopping()` eklendi. Yeşil.
 - [ ] **TC14: Place Order — Register while Checkout** — Guest checkout → kayıt → ödeme. **Guest flow hiç test edilmiyor.**
 - [ ] **TC20: Search Products and Verify Cart After Login** — Guest cart + login → sepet korunmuş mu? Session persistence.
 - [ ] **TC23: Verify Address Details in Checkout Page** — Kayıt adresi ↔ checkout adresi uyumu. Data integrity.
