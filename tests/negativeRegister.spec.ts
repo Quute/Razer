@@ -13,21 +13,16 @@ test.describe('Negative Register Tests', () => {
         // 2. Verify "New User Signup!" is visible
         await expect(loginPage.signupNameInput).toBeVisible();
 
-        // 3. Enter name and already registered email address
-        await loginPage.signupNameInput.fill(name);
-        await loginPage.signupEmailInput.fill(existingEmail);
+        // 3. Enter name and already registered email address, click Signup
+        await loginPage.startSignup(name, existingEmail);
 
-        // 4. Click 'Signup' button
-        await loginPage.signupButton.click();
-
-        // 5. Verify error 'Email Address already exist!' is visible
-        const errorMessage = loginPage.page.getByText('Email Address already exist!');
-        await expect(errorMessage).toBeVisible();
+        // 4. Verify error 'Email Address already exist!' is visible
+        await expect(loginPage.signupErrorMessage).toBeVisible();
     });
-    
+
     test('İsim alanı boş bırakıldığında HTML5 validasyon hatası vermeli', async ({ loginPage }) => {
         await loginPage.navigate();
-        
+
         // Sadece email giriyoruz, isim alanı boşkalıyor
         await loginPage.signupEmailInput.fill(`test_${Date.now()}@test.com`);
         await loginPage.signupButton.click();
@@ -42,7 +37,7 @@ test.describe('Negative Register Tests', () => {
 
     test('Geçersiz formatta email girildiğinde HTML5 validasyon hatası vermeli', async ({ loginPage }) => {
         await loginPage.navigate();
-        
+
         // Geçerli bir isim fakat içerisinde '@' işareti olmayan hatalı formatta bir email giriyoruz
         await loginPage.signupNameInput.fill('Oto Test');
         await loginPage.signupEmailInput.fill('gecersizemailadresi.com');
@@ -58,7 +53,7 @@ test.describe('Negative Register Tests', () => {
 
     test('Hesap oluştururken (Adım 2) şifre alanı boş bırakıldığında kayıt tamamlanamamalı', async ({ loginPage, signupPage }) => {
         const uniqueEmail = `test_${Date.now()}@test.com`;
-        
+
         // 1. İlk adımı başarılı bilgilerle geçiyoruz
         await loginPage.navigate();
         await loginPage.signupNameInput.fill('Yeni Kullanici');
@@ -76,7 +71,7 @@ test.describe('Negative Register Tests', () => {
         await signupPage.yearSelect.selectOption('1995');
         await signupPage.newsletterCheckbox.check();
         await signupPage.offersCheckbox.check();
-        
+
         await signupPage.fillAddressInfo({
             firstName: 'Test',
             lastName: 'Kullanici',
@@ -95,7 +90,7 @@ test.describe('Negative Register Tests', () => {
 
         // 5. Kayıt BAŞARISIZ olduğu için sistemin bizi SignUp ekranında tuttuğunu test ediyoruz.
         await expect(signupPage.page).toHaveURL(/.*signup/);
-        
+
         // Şifre elementinin validasyon hatası barındırdığını POM üzerinden lokatöre erişerek doğruluyoruz.
         const isPasswordValid = await signupPage.passwordInput.evaluate((el: HTMLInputElement) => el.checkValidity());
         expect(isPasswordValid).toBeFalsy();

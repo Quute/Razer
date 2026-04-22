@@ -32,8 +32,8 @@ export class ProductsPage {
         // 'id' selector is used for the search button.
         this.searchButton = page.locator('button#submit_search');
 
-        // The title that appears after a search operation. The h2 tag with the text-center class was detected.
-        this.searchedProductsHeader = page.locator('h2.title.text-center').filter({ hasText: 'Searched Products' });
+        // The title that appears after a search operation. Rendered text is uppercase ("SEARCHED PRODUCTS"), so use case-insensitive regex.
+        this.searchedProductsHeader = page.locator('h2.title.text-center').filter({ hasText: /searched products/i });
 
         // To capture the 'View Product' link of the first product in the product list (more stable css usage)
         this.firstProductViewLink = page.locator('.choose a').first();
@@ -68,7 +68,11 @@ export class ProductsPage {
     // 2. Method that combines product search operation in a single function
     async searchProduct(productName: string) {
         await this.searchInput.fill(productName);
-        await this.searchButton.click();
+        // Wait for navigation/reload triggered by form submit
+        await Promise.all([
+            this.page.waitForLoadState('domcontentloaded'),
+            this.searchButton.click(),
+        ]);
     }
 
     // 3. Navigate to the details of the first appeared product method
@@ -91,6 +95,8 @@ export class ProductsPage {
 
     // 6. Navigate to 'View Cart' from added to cart confirmation pop-up
     async viewCartFromModal() {
+        // Wait for the modal's view-cart link to be visible (Bootstrap fade completes)
+        await this.viewCartModalLink.waitFor({ state: 'visible', timeout: 15000 });
         await this.viewCartModalLink.click();
     }
 }

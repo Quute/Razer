@@ -1,29 +1,27 @@
 import { test, expect } from '../src/fixtures/baseTest';
 
-test.describe('Kullanıcı Kimlik Doğrulama Testleri', () => {
-  test('Login sayfası öğeleri görünür olmalı', async ({ loginPage }) => {
-    await loginPage.navigate();
+const TEST_EMAIL = process.env.TEST_USER_EMAIL!;
+const TEST_PASSWORD = process.env.TEST_USER_PASSWORD!;
 
-    // loginPage fixture automatically creates the object.
-    await expect(loginPage.emailInput).toBeVisible();
-    await expect(loginPage.loginButton).toBeVisible();
-  });
+test.describe('User Authentication Tests', () => {
+    test('Login page elements should be visible', async ({ loginPage }) => {
+        await loginPage.navigate();
 
-  test('Geçersiz bilgilerle login denemesi hata vermeli', async ({ loginPage }) => {
-    await loginPage.navigate();
-    await loginPage.login('invalid@example.com', 'wrongpassword');
+        await expect(loginPage.emailInput).toBeVisible();
+        await expect(loginPage.loginButton).toBeVisible();
+    });
 
-    // Verify error message is visible
-    const errorMessage = loginPage.page.locator('//*[@id="form"]/div/div/div[1]/div/form/p'); // Use appropriate locator for error message
-    await expect(errorMessage).toBeVisible();
-  });
+    test('Login with invalid credentials should show error', async ({ loginPage }) => {
+        await loginPage.navigate();
+        await loginPage.login('invalid@example.com', 'wrongpassword');
 
-  test('Geçerli bilgilerle login başarılı olmalı', async ({ loginPage }) => {
-    await loginPage.navigate();
-    await loginPage.login('bqyilmaz2@gmail.com', '123456');
+        await expect(loginPage.loginErrorMessage).toBeVisible();
+    });
 
-    // Verify username is visible after successful login
-    const userName = loginPage.page.locator('//*[@id="header"]/div/div/div/div[2]/div/ul/li[10]/a/b'); // Use appropriate locator for username
-    await expect(userName).toBeVisible();
-  });
+    test('Login with valid credentials should succeed', async ({ loginPage, homePage }) => {
+        await loginPage.navigate();
+        await loginPage.login(TEST_EMAIL, TEST_PASSWORD);
+
+        await expect(homePage.loggedInAsUser).toBeVisible();
+    });
 });

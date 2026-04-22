@@ -4,7 +4,7 @@ test.describe('Ürün Arama ve Detay Testleri', () => {
 
     test.beforeEach(async ({ page }) => {
         // Navigate to the homepage before each test
-        await page.goto('https://automationexercise.com/');
+        await page.goto('/');
     });
 
 

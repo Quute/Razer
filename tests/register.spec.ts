@@ -13,9 +13,7 @@ test.describe('Kullanıcı Kayıt Testleri', () => {
         await expect(loginPage.signupNameInput).toBeVisible();
 
         // 3. Enter name and email, click Signup
-        await loginPage.signupNameInput.fill(name);
-        await loginPage.signupEmailInput.fill(uniqueEmail);
-        await loginPage.signupButton.click();
+        await loginPage.startSignup(name, uniqueEmail);
 
         // 4. Verify account information form is displayed
         await expect(signupPage.accountInfoHeader).toBeVisible();

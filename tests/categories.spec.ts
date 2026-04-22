@@ -4,7 +4,7 @@ test.describe('Kategori Menüsü Testleri', () => {
 
     test.beforeEach(async ({ page }) => {
         // Navigate to the homepage before each test
-        await page.goto('https://automationexercise.com/');
+        await page.goto('/');
     });
 
     test('Women -> Dress kategorisindeki ürünlerin doğru listelendiği doğrulanmalı', async ({ homePage, page }) => {

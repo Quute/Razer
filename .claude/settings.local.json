@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:automationexercise.com)",
-      "Bash(npx playwright *)"
+      "Bash(npx playwright *)",
+      "Bash(npm install *)"
     ]
   }
 }

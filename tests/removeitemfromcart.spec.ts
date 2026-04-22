@@ -4,7 +4,7 @@ test.describe('Sepetten Ürün Silme Testleri', () => {
 
     test.beforeEach(async ({ page, productsPage }) => {
         // Navigate to the homepage before each test
-        await page.goto('https://automationexercise.com/');
+        await page.goto('/');
 
         // Setup steps: add 2 products to the cart
         await productsPage.navigateToProducts();
