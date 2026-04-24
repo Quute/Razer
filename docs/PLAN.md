@@ -56,9 +56,9 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 
 | Durum | Case No | Not |
 |---|---|---|
-| ✅ Tam kapsanıyor | 1, 2, 3, 4, 5, 9, 12, 14, 15, 16, 17, 23 | register, auth, duplicate email, logout, search, multi-cart, checkout-register, checkout-before, address verify |
+| ✅ Tam kapsanıyor | 1, 2, 3, 4, 5, 9, 12, 14, 15, 16, 17, 20, 23 | register, auth, duplicate email, logout, search, multi-cart, checkout-register, checkout-before, cart persistence, address verify |
 | ⚠️ Kısmi kapsanıyor | 8, 13, 18 | Aşağıda açıklandı |
-| ❌ Kapsanmıyor | 6, 7, 10, 11, 19, 20, 21, 22, 24, 25, 26 | **11 case** |
+| ❌ Kapsanmıyor | 6, 7, 10, 11, 19, 21, 22, 24, 25, 26 | **10 case** |
 
 ### 🔴 P1 — Kritik
 
@@ -66,7 +66,7 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 - [x] **TC9: Search Product** — `tests/searchProduct.spec.ts` yazıldı. Google vignette interstitial bypass'ı ile stabilize edildi (`#google_vignette` check + URL fallback). Yeşil.
 - [x] **TC12: Add Multiple Products in Cart** — `tests/multipleCart.spec.ts` yazıldı. `ProductsPage`'e `productCards`, `addProductToCartByIndex()`, `continueShopping()` eklendi. Yeşil.
 - [x] **TC14: Place Order — Register while Checkout** — `tests/registerDuringCheckout.spec.ts` yazıldı. Guest checkout → kayıt → ödeme akışı eklendi. Yeşil.
-- [ ] **TC20: Search Products and Verify Cart After Login** — Guest cart + login → sepet korunmuş mu? Session persistence.
+- [x] **TC20: Search Products and Verify Cart After Login** — `tests/sessionPersistCart.spec.ts` yazıldı. Test başında server-side cart pre-cleanup (login → clear → logout), guest search + 2 ürün ekle, login, cart persistence doğrula. Set-based assertion (login sonrası merge order değişebiliyor). Yeşil 3/3.
 - [ ] **TC23: Verify Address Details in Checkout Page** — Kayıt adresi ↔ checkout adresi uyumu. Data integrity.
 
 ### 🟡 P2 — Önemli
