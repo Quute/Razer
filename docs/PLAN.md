@@ -56,8 +56,8 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 
 | Durum | Case No | Not |
 |---|---|---|
-| ✅ Tam kapsanıyor | 1, 2, 3, 4, 5, 6, 9, 12, 14, 15, 16, 17, 20, 23 | register, auth, duplicate email, logout, contact us, search, multi-cart, checkout-register, checkout-before, cart persistence, address verify |
-| ⚠️ Kısmi kapsanıyor | 8, 13, 18 | Aşağıda açıklandı |
+| ✅ Tam kapsanıyor | 1, 2, 3, 4, 5, 6, 8, 9, 12, 14, 15, 16, 17, 20, 23 | register, auth, duplicate email, logout, contact us, search, multi-cart, checkout-register, checkout-before, cart persistence, address verify, all products + detail |
+| ⚠️ Kısmi kapsanıyor | 13, 18 | Aşağıda açıklandı |
 | ❌ Kapsanmıyor | 7, 10, 11, 19, 21, 22, 24, 25, 26 | **9 case** |
 
 ### 🔴 P1 — Kritik
@@ -71,7 +71,7 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 
 ### 🟡 P2 — Önemli
 
-- [ ] **TC8: Verify All Products and Product Detail Page** (kısmi) — `/products` listesi doğrulaması eksik.
+- [x] **TC8: Verify All Products and Product Detail Page** — `tests/products.spec.ts`'e saf TC8 testi eklendi. `allProductsHeader`, `productCondition`, `productBrand` locator'ları POM'a geldi. Eski "sepete ekleme" testindeki flake (vignette + modal kaybı) add-to-cart retry ile kapatıldı. Yeşil 6/6, sıfır retry.
 - [x] **TC15: Place Order — Register Before Checkout** — `tests/registerBeforeCheckout.spec.ts` yazıldı. Product-detail add-to-cart + `cartModal.waitFor` ile server sync + `page.goto('/view_cart')` ile flake-free. Yeşil.
 - [ ] **TC18: View Category Products** (kısmi) — Men kategorisi ve alt kategoriler de test edilmeli.
 - [ ] **TC19: View & Cart Brand Products** — Brand filtreleme + sepete ekleme.

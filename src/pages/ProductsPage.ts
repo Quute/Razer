@@ -13,6 +13,11 @@ export class ProductsPage {
     readonly productCategory: Locator;
     readonly productPrice: Locator;
     readonly productAvailability: Locator;
+    readonly productCondition: Locator;
+    readonly productBrand: Locator;
+
+    // All Products Page Elements
+    readonly allProductsHeader: Locator;
 
     // Cart Interaction Elements
     readonly quantityInput: Locator;
@@ -55,6 +60,15 @@ export class ProductsPage {
 
         // 'contains' method to find Availability status.
         this.productAvailability = page.locator("xpath=//p[contains(., 'Availability:')]");
+
+        // Condition and Brand live in the same .product-information block as
+        // adjacent <p> elements; text-based xpath is stable across layout tweaks.
+        this.productCondition = page.locator("xpath=//p[contains(., 'Condition:')]");
+        this.productBrand = page.locator("xpath=//p[contains(., 'Brand:')]");
+
+        // 'ALL PRODUCTS' header on /products. DOM text is lower/mixed case but
+        // rendered uppercase via CSS, so use a case-insensitive regex.
+        this.allProductsHeader = page.locator('h2.title.text-center').filter({ hasText: /all products/i });
 
         // --- Cart Interaction Elements ---
         // Quantity input field id is quantity
