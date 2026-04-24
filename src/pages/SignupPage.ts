@@ -24,7 +24,6 @@ export class SignupPage {
     readonly accountCreatedHeader: Locator;
     readonly continueButton: Locator;
     readonly loggedInAs: Locator;
-    readonly deleteAccountLink: Locator;
     readonly accountDeletedHeader: Locator;
 
     constructor(page: Page) {
@@ -51,7 +50,6 @@ export class SignupPage {
         this.accountCreatedHeader = page.locator('[data-qa="account-created"]');
         this.continueButton = page.locator('[data-qa="continue-button"]');
         this.loggedInAs = page.locator('a:has-text("Logged in as")');
-        this.deleteAccountLink = page.locator('a[href="/delete_account"]');
         this.accountDeletedHeader = page.locator('[data-qa="account-deleted"]');
     }
 
@@ -88,9 +86,5 @@ export class SignupPage {
 
     async clickContinue() {
         await this.continueButton.click();
-    }
-
-    async deleteAccount() {
-        await this.deleteAccountLink.click();
     }
 }

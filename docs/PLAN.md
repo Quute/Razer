@@ -56,16 +56,16 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 
 | Durum | Case No | Not |
 |---|---|---|
-| ✅ Tam kapsanıyor | 1, 2, 3, 5, 16, 17 | register, auth (valid/invalid), duplicate email, login-before-checkout, remove from cart |
+| ✅ Tam kapsanıyor | 1, 2, 3, 5, 14, 16, 17 | register, auth, duplicate email, checkout-register |
 | ⚠️ Kısmi kapsanıyor | 8, 13, 18 | Aşağıda açıklandı |
-| ❌ Kapsanmıyor | 4, 6, 7, 9, 10, 11, 12, 14, 15, 19, 20, 21, 22, 23, 24, 25, 26 | **17 case** |
+| ❌ Kapsanmıyor | 4, 6, 7, 9, 10, 11, 12, 15, 19, 20, 21, 22, 23, 24, 25, 26 | **16 case** |
 
 ### 🔴 P1 — Kritik
 
 - [x] **TC4: Logout User** — `tests/logout.spec.ts` yazıldı. `HomePage.logoutLink` + `logout()` eklendi. Yeşil.
 - [x] **TC9: Search Product** — `tests/searchProduct.spec.ts` yazıldı. Google vignette interstitial bypass'ı ile stabilize edildi (`#google_vignette` check + URL fallback). Yeşil.
 - [x] **TC12: Add Multiple Products in Cart** — `tests/multipleCart.spec.ts` yazıldı. `ProductsPage`'e `productCards`, `addProductToCartByIndex()`, `continueShopping()` eklendi. Yeşil.
-- [ ] **TC14: Place Order — Register while Checkout** — Guest checkout → kayıt → ödeme. **Guest flow hiç test edilmiyor.**
+- [x] **TC14: Place Order — Register while Checkout** — `tests/registerDuringCheckout.spec.ts` yazıldı. Guest checkout → kayıt → ödeme akışı eklendi. Yeşil.
 - [ ] **TC20: Search Products and Verify Cart After Login** — Guest cart + login → sepet korunmuş mu? Session persistence.
 - [ ] **TC23: Verify Address Details in Checkout Page** — Kayıt adresi ↔ checkout adresi uyumu. Data integrity.
 

@@ -2,7 +2,7 @@ import { test, expect } from '../src/fixtures/baseTest';
 
 test.describe('Kullanıcı Kayıt Testleri', () => {
 
-    test('Yeni kullanıcı kaydı başarılı olmalı ve hesap silinebilmeli', async ({ loginPage, signupPage, page }) => {
+    test('Yeni kullanıcı kaydı başarılı olmalı ve hesap silinebilmeli', async ({ loginPage, signupPage, homePage, page }) => {
         const uniqueEmail = `user_${Date.now()}@test.com`;
         const name = 'Test User';
 
@@ -44,7 +44,7 @@ test.describe('Kullanıcı Kayıt Testleri', () => {
         await expect(signupPage.loggedInAs).toContainText(name);
 
         // 9. Delete account and verify
-        await signupPage.deleteAccount();
+        await homePage.deleteAccountLink.click();
         await expect(signupPage.accountDeletedHeader).toBeVisible();
         await signupPage.clickContinue();
     });
