@@ -85,18 +85,8 @@ test.describe('Ürün Arama ve Detay Testleri', () => {
         // 4. Set quantity (e.g., 2 pieces)
         await productsPage.setQuantity('2');
 
-        // 5. Add to cart. The site occasionally swallows the first click
-        //    (add-to-cart stays idle without a server call). Retry once if
-        //    the confirmation modal never renders — more deterministic than
-        //    relying on viewCartFromModal's goto fallback which masks a
-        //    failed add as an empty cart.
+        // 5. Add to cart (POM handles modal verification and retry)
         await productsPage.addToCart();
-        try {
-            await productsPage.cartModal.waitFor({ state: 'visible', timeout: 5000 });
-        } catch {
-            await productsPage.addToCart();
-            await productsPage.cartModal.waitFor({ state: 'visible', timeout: 8000 });
-        }
 
         // 6. Go to cart via modal
         await productsPage.viewCartFromModal();

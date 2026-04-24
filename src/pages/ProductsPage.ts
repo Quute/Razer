@@ -116,9 +116,25 @@ export class ProductsPage {
         await this.quantityInput.fill(quantity);
     }
 
-    // 5. Click the 'Add to Cart' button
+    // 5. Click the 'Add to Cart' button on the product detail page. The site
+    //    occasionally swallows the first click when the Google vignette
+    //    interstitial fires — the click dismisses the ad instead of hitting
+    //    the button, appending `#google_vignette` to the URL. We detect this
+    //    and strip the hash, then retry. We also retry once more if the
+    //    confirmation modal never renders. No modal = no server-side write,
+    //    so retries are idempotent.
     async addToCart() {
         await this.addToCartButton.click();
+        if (this.page.url().includes('#google_vignette')) {
+            await this.page.goto(this.page.url().replace('#google_vignette', ''));
+            await this.addToCartButton.click();
+        }
+        try {
+            await this.cartModal.waitFor({ state: 'visible', timeout: 5000 });
+        } catch {
+            await this.addToCartButton.click();
+            await this.cartModal.waitFor({ state: 'visible', timeout: 8000 });
+        }
     }
 
     // 6. Navigate to 'View Cart' from added to cart confirmation pop-up.
@@ -138,11 +154,31 @@ export class ProductsPage {
     // 7. Add a product to cart from the product list page by index (0-based).
     //    Each product card has two add-to-cart links (base + hover overlay); hovering
     //    surfaces the overlay one which is the intended click target per TC12.
+    //    Handles the Google vignette eating the click (strip `#google_vignette`
+    //    and retry) and a generic missed click (retry once if the confirmation
+    //    modal never renders). No modal = no server write = safe to retry.
     async addProductToCartByIndex(index: number) {
         const card = this.productCards.nth(index);
-        await card.scrollIntoViewIfNeeded();
-        await card.hover();
-        await card.locator('.product-overlay .add-to-cart').first().click();
+        const overlay = card.locator('.product-overlay .add-to-cart').first();
+
+        const attemptClick = async () => {
+            await card.scrollIntoViewIfNeeded();
+            await card.hover();
+            await overlay.click();
+        };
+
+        await attemptClick();
+        if (this.page.url().includes('#google_vignette')) {
+            await this.page.goto(this.page.url().replace('#google_vignette', ''));
+            await attemptClick();
+        }
+
+        try {
+            await this.cartModal.waitFor({ state: 'visible', timeout: 5000 });
+        } catch {
+            await attemptClick();
+            await this.cartModal.waitFor({ state: 'visible', timeout: 8000 });
+        }
     }
 
     // 8. Dismiss the cart confirmation modal via 'Continue Shopping' and wait for it to hide.
