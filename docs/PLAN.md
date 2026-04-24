@@ -56,9 +56,9 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 
 | Durum | Case No | Not |
 |---|---|---|
-| ✅ Tam kapsanıyor | 1, 2, 3, 5, 14, 16, 17 | register, auth, duplicate email, checkout-register |
+| ✅ Tam kapsanıyor | 1, 2, 3, 4, 5, 9, 12, 14, 15, 16, 17, 23 | register, auth, duplicate email, logout, search, multi-cart, checkout-register, checkout-before, address verify |
 | ⚠️ Kısmi kapsanıyor | 8, 13, 18 | Aşağıda açıklandı |
-| ❌ Kapsanmıyor | 4, 6, 7, 9, 10, 11, 12, 15, 19, 20, 21, 22, 23, 24, 25, 26 | **16 case** |
+| ❌ Kapsanmıyor | 6, 7, 10, 11, 19, 20, 21, 22, 24, 25, 26 | **11 case** |
 
 ### 🔴 P1 — Kritik
 
@@ -72,7 +72,7 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 ### 🟡 P2 — Önemli
 
 - [ ] **TC8: Verify All Products and Product Detail Page** (kısmi) — `/products` listesi doğrulaması eksik.
-- [ ] **TC15: Place Order — Register Before Checkout** — TC14'ün alternatifi; farklı user-state akışı.
+- [x] **TC15: Place Order — Register Before Checkout** — `tests/registerBeforeCheckout.spec.ts` yazıldı. Product-detail add-to-cart + `cartModal.waitFor` ile server sync + `page.goto('/view_cart')` ile flake-free. Yeşil.
 - [ ] **TC18: View Category Products** (kısmi) — Men kategorisi ve alt kategoriler de test edilmeli.
 - [ ] **TC19: View & Cart Brand Products** — Brand filtreleme + sepete ekleme.
 - [ ] **TC21: Add Review on Product** — Review submit + form validasyon + success message.
