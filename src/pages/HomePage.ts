@@ -9,6 +9,7 @@ export class HomePage {
     readonly deleteAccountLink: Locator;
     readonly loggedInAsUser: Locator;
     readonly cartLink: Locator;
+    readonly contactUsLink: Locator;
 
     // Category Navbar Locators
     readonly categoryWomen: Locator;
@@ -27,6 +28,7 @@ export class HomePage {
         this.deleteAccountLink = page.locator('a[href="/delete_account"]');
         this.loggedInAsUser = page.locator('a:has-text("Logged in as") b');
         this.cartLink = page.locator('a[href="/view_cart"]').first();
+        this.contactUsLink = page.locator('a[href="/contact_us"]');
 
         // The 'Women' category toggle link
         this.categoryWomen = page.locator('a[href="#Women"]');

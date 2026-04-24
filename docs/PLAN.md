@@ -56,9 +56,9 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 
 | Durum | Case No | Not |
 |---|---|---|
-| ✅ Tam kapsanıyor | 1, 2, 3, 4, 5, 9, 12, 14, 15, 16, 17, 20, 23 | register, auth, duplicate email, logout, search, multi-cart, checkout-register, checkout-before, cart persistence, address verify |
+| ✅ Tam kapsanıyor | 1, 2, 3, 4, 5, 6, 9, 12, 14, 15, 16, 17, 20, 23 | register, auth, duplicate email, logout, contact us, search, multi-cart, checkout-register, checkout-before, cart persistence, address verify |
 | ⚠️ Kısmi kapsanıyor | 8, 13, 18 | Aşağıda açıklandı |
-| ❌ Kapsanmıyor | 6, 7, 10, 11, 19, 21, 22, 24, 25, 26 | **10 case** |
+| ❌ Kapsanmıyor | 7, 10, 11, 19, 21, 22, 24, 25, 26 | **9 case** |
 
 ### 🔴 P1 — Kritik
 
@@ -77,7 +77,7 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 - [ ] **TC19: View & Cart Brand Products** — Brand filtreleme + sepete ekleme.
 - [ ] **TC21: Add Review on Product** — Review submit + form validasyon + success message.
 - [ ] **TC24: Download Invoice After Purchase Order** — `page.waitForEvent('download')`.
-- [ ] **TC6: Contact Us Form** — `setInputFiles` ile file upload kullanımı.
+- [x] **TC6: Contact Us Form** — `tests/contactUs.spec.ts` yazıldı. JS Alert yönetimi (`page.on('dialog')`) ve `setInputFiles` ile dosya yükleme test edildi. Yeşil.
 
 ### 🟢 P3 — Düşük
 

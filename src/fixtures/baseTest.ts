@@ -7,6 +7,7 @@ import { CheckoutPage } from '../pages/CheckoutPage';
 import { PaymentPage } from '../pages/PaymentPage';
 import { PaymentSuccessPage } from '../pages/PaymentSuccessPage';
 import { SignupPage } from '../pages/SignupPage';
+import { ContactUsPage } from '../pages/ContactUsPage';
 
 // Create a fixture containing page objects
 type MyFixtures = {
@@ -18,6 +19,7 @@ type MyFixtures = {
     paymentPage: PaymentPage;
     paymentSuccessPage: PaymentSuccessPage;
     signupPage: SignupPage;
+    contactUsPage: ContactUsPage;
 }
 
 // Extend Playwright's test function to add our custom fixture
@@ -97,6 +99,11 @@ export const test = base.extend<MyFixtures>({
     signupPage: async ({ page }, use) => {
         const signupPage = new SignupPage(page);
         await use(signupPage);
+    },
+    // Define contactUsPage fixture
+    contactUsPage: async ({ page }, use) => {
+        const contactUsPage = new ContactUsPage(page);
+        await use(contactUsPage);
     },
 });
 

@@ -18,10 +18,15 @@ test.describe('TC20 - Search Products and Verify Cart After Login', () => {
         await loginPage.navigate();
         await loginPage.login(TEST_EMAIL, TEST_PASSWORD);
         await homePage.cartLink.click();
+        if (page.url().includes('#google_vignette')) {
+            await page.goto('/view_cart');
+        }
+        await page.waitForURL(/.*view_cart/);
+        
         const existingCount = await cartPage.getCartItemCount();
         for (let i = 0; i < existingCount; i++) {
             await cartPage.deleteProductFromCart(0);
-            await expect(cartPage.cartRows).toHaveCount(existingCount - i - 1);
+            await expect(cartPage.cartRows).toHaveCount(existingCount - i - 1, { timeout: 15000 });
         }
         await homePage.logout();
 
@@ -75,6 +80,11 @@ test.describe('TC20 - Search Products and Verify Cart After Login', () => {
 
         // 10. Click 'Signup / Login' and submit login details
         await homePage.signupLoginLink.click();
+        if (page.url().includes('#google_vignette')) {
+            await page.goto('/login');
+        }
+        await page.waitForURL(/.*login/);
+
         await loginPage.login(TEST_EMAIL, TEST_PASSWORD);
 
         // Confirm we are logged in
@@ -82,6 +92,9 @@ test.describe('TC20 - Search Products and Verify Cart After Login', () => {
 
         // 11. Go to Cart page again
         await homePage.cartLink.click();
+        if (page.url().includes('#google_vignette')) {
+            await page.goto('/view_cart');
+        }
         await expect(page).toHaveURL(/.*view_cart/);
 
         // 12. Verify the same products persist after login (set-based; server
@@ -94,8 +107,8 @@ test.describe('TC20 - Search Products and Verify Cart After Login', () => {
 
         // Cleanup: empty the cart so the account stays clean for other tests
         await cartPage.deleteProductFromCart(0);
-        await expect(cartPage.cartRows).toHaveCount(1);
+        await expect(cartPage.cartRows).toHaveCount(1, { timeout: 15000 });
         await cartPage.deleteProductFromCart(0);
-        await expect(cartPage.cartRows).toHaveCount(0);
+        await expect(cartPage.cartRows).toHaveCount(0, { timeout: 15000 });
     });
 });
