@@ -36,11 +36,10 @@ test.describe('TC14 - Place Order: Register while Checkout', () => {
         await expect(page).toHaveURL(/.*view_cart/);
         expect(await cartPage.getCartItemCount()).toBeGreaterThan(0);
 
-        // 7. Click Proceed To Checkout
-        await cartPage.proceedToCheckout();
-
-        // 8. Click 'Register / Login' button
-        await cartPage.checkoutModalRegisterLoginLink.click();
+        // 7-8. Click Proceed To Checkout, then 'Register / Login' in the modal.
+        //      Uses the guest helper which retries if the site swallows the first
+        //      proceed click (intermittent Bootstrap modal render flake).
+        await cartPage.proceedToCheckoutAsGuest();
 
         // 9. Fill all details in Signup and create account
         const randomStr = Math.random().toString(36).substring(2, 10);

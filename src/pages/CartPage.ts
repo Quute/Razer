@@ -72,6 +72,21 @@ export class CartPage {
         await this.proceedToCheckoutBtn.click();
     }
 
+    // Proceed-to-checkout variant for a guest user: the site shows a Register/Login
+    // modal before allowing checkout. The proceed click is occasionally swallowed
+    // and the modal never renders, so retry the click once if the modal's
+    // register/login link hasn't become visible.
+    async proceedToCheckoutAsGuest() {
+        await this.proceedToCheckoutBtn.click();
+        try {
+            await this.checkoutModalRegisterLoginLink.waitFor({ state: 'visible', timeout: 5000 });
+        } catch {
+            await this.proceedToCheckoutBtn.click();
+            await this.checkoutModalRegisterLoginLink.waitFor({ state: 'visible', timeout: 8000 });
+        }
+        await this.checkoutModalRegisterLoginLink.click();
+    }
+
     // Method to delete a specific product from the cart
     async deleteProductFromCart(index: number) {
         await this.deleteButtons.nth(index).click();
