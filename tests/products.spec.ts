@@ -1,6 +1,6 @@
 import { test, expect } from '../src/fixtures/baseTest';
 
-test.describe('Ürün Arama ve Detay Testleri', () => {
+test.describe('Product Search and Detail Tests', () => {
 
     test.beforeEach(async ({ page }) => {
         // Navigate to the homepage before each test
@@ -46,7 +46,7 @@ test.describe('Ürün Arama ve Detay Testleri', () => {
         expect((await productsPage.productBrand.innerText()).trim()).toContain('Brand');
     });
 
-    test('Ürün detaylarında doğru bilgiler gösterilmeli ve ürün sepete eklenebilmeli', async ({ productsPage, cartPage, page }) => {
+    test('Product detail page should show correct info and product should be addable to cart', async ({ productsPage, cartPage, page }) => {
         // 1. Navigate to the products page
         await productsPage.navigateToProducts();
 

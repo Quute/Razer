@@ -29,6 +29,10 @@ export class ProductsPage {
     // Product List Elements (used for TC12 multi-add)
     readonly productCards: Locator;
 
+    // --- Brand Sidebar Elements (TC19) ---
+    readonly brandsSidebar: Locator;
+    readonly brandsList: Locator;
+
     constructor(page: Page) {
         this.page = page;
 
@@ -55,8 +59,11 @@ export class ProductsPage {
         // Found as a paragraph (p) containing the text 'Category' within the product category.
         this.productCategory = page.locator("xpath=//p[contains(text(), 'Category')]");
 
-        // Hierarchical span usage instead of class structure to find the product price.
-        this.productPrice = page.locator('span > span').first();
+        // Price on the product detail page. The .product-information block has
+        // a nested <span><span>Rs. 500</span>...</span>; scoping to that block
+        // + filtering on the "Rs." prefix avoids unrelated nested spans
+        // elsewhere on the page (header dropdowns, sidebar widgets).
+        this.productPrice = page.locator('.product-information span span').filter({ hasText: /^Rs\./ }).first();
 
         // 'contains' method to find Availability status.
         this.productAvailability = page.locator("xpath=//p[contains(., 'Availability:')]");
@@ -86,6 +93,16 @@ export class ProductsPage {
 
         // Product cards on the /products list page
         this.productCards = page.locator('.features_items .product-image-wrapper');
+
+        // --- Brand Sidebar Locators (TC19) ---
+        // The 'Brands' panel on the left sidebar of /products. The site
+        // renders this block with class .brands_products holding the brand list.
+        this.brandsSidebar = page.locator('.brands_products');
+
+        // All brand links in the sidebar share href prefix "/brand_products/<name>".
+        // Anchoring on href is more stable than text since the markup also
+        // contains a product-count suffix like "(6)" inside the <li>.
+        this.brandsList = this.brandsSidebar.locator('a[href^="/brand_products/"]');
     }
 
     // 1. Navigate to products page from menu method
@@ -186,5 +203,30 @@ export class ProductsPage {
         await this.continueShoppingButton.waitFor({ state: 'visible', timeout: 15000 });
         await this.continueShoppingButton.click();
         await this.cartModal.waitFor({ state: 'hidden', timeout: 15000 });
+    }
+
+    // 9. Resolve a brand sidebar link by its visible name. Anchoring on the
+    //    /brand_products/<name> href avoids the trailing "(count)" text and
+    //    is case-insensitive on Windows-encoded URLs.
+    getBrandLink(brandName: string): Locator {
+        return this.brandsSidebar.locator(`a[href$="/brand_products/${brandName}"]`).first();
+    }
+
+    // 10. The brand-products page header. Same h2.title.text-center selector
+    //     used for ALL/SEARCHED PRODUCTS, so we filter by the brand name to
+    //     differentiate (rendered uppercase as e.g. "BRAND - POLO PRODUCTS").
+    getBrandHeader(brandName: string): Locator {
+        return this.page.locator('h2.title.text-center').filter({ hasText: new RegExp(brandName, 'i') });
+    }
+
+    // 11. Click a brand from the sidebar with vignette recovery. Mirrors the
+    //     pattern used in addToCart / search: if the Google interstitial
+    //     swallows the click and appends "#google_vignette", strip the hash
+    //     and navigate directly to /brand_products/<name>.
+    async clickBrand(brandName: string) {
+        await this.getBrandLink(brandName).click();
+        if (this.page.url().includes('#google_vignette')) {
+            await this.page.goto(`/brand_products/${brandName}`);
+        }
     }
 }

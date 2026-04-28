@@ -2,7 +2,7 @@ import { test, expect } from '../src/fixtures/baseTest';
 
 test.describe('Negative Register Tests', () => {
 
-    test('Kayıtlı bir email ile yeni kayıt oluşturulmamalı (Test Case 5)', async ({ loginPage }) => {
+    test('Registration with an already-registered email should be rejected (Test Case 5)', async ({ loginPage }) => {
         // Sistemde zaten var olan (auth testlerinde kullanılan) email'i kullanıyoruz.
         const existingEmail = 'bqyilmaz2@gmail.com';
         const name = 'Mevcut Kullanıcı';
@@ -20,7 +20,7 @@ test.describe('Negative Register Tests', () => {
         await expect(loginPage.signupErrorMessage).toBeVisible();
     });
 
-    test('İsim alanı boş bırakıldığında HTML5 validasyon hatası vermeli', async ({ loginPage }) => {
+    test('Empty name field should trigger HTML5 validation error', async ({ loginPage }) => {
         await loginPage.navigate();
 
         // Sadece email giriyoruz, isim alanı boşkalıyor
@@ -35,7 +35,7 @@ test.describe('Negative Register Tests', () => {
         expect(isNameValid).toBeFalsy();
     });
 
-    test('Geçersiz formatta email girildiğinde HTML5 validasyon hatası vermeli', async ({ loginPage }) => {
+    test('Invalid email format should trigger HTML5 validation error', async ({ loginPage }) => {
         await loginPage.navigate();
 
         // Geçerli bir isim fakat içerisinde '@' işareti olmayan hatalı formatta bir email giriyoruz
@@ -51,7 +51,7 @@ test.describe('Negative Register Tests', () => {
         expect(isEmailValid).toBeFalsy();
     });
 
-    test('Hesap oluştururken (Adım 2) şifre alanı boş bırakıldığında kayıt tamamlanamamalı', async ({ loginPage, signupPage }) => {
+    test('Registration should fail when password field is left empty in Step 2', async ({ loginPage, signupPage }) => {
         const uniqueEmail = `test_${Date.now()}@test.com`;
 
         // 1. İlk adımı başarılı bilgilerle geçiyoruz

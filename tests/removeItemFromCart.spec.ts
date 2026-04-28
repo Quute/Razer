@@ -1,6 +1,6 @@
 import { test, expect } from '../src/fixtures/baseTest';
 
-test.describe('Sepetten Ürün Silme Testleri', () => {
+test.describe('Remove Item From Cart Tests', () => {
 
     test.beforeEach(async ({ page, productsPage }) => {
         // Navigate to the homepage before each test
@@ -24,7 +24,7 @@ test.describe('Sepetten Ürün Silme Testleri', () => {
 
 
 
-    test('Sepetteki ürünleri tamamen silerek sepeti boşaltma (2\'den 0\'a)', async ({ cartPage }) => {
+    test('Removing all items from cart should empty it (from 2 to 0)', async ({ cartPage }) => {
         // Initially, there is 1 product item (a row containing 2 pieces)
         let itemCount = await cartPage.getCartItemCount();
         expect(itemCount).toBe(1);

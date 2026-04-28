@@ -30,23 +30,19 @@ Mevcut yapı sağlam temelli (POM + fixture + ad-block), fakat aşağıdaki iyil
 
 ### P2 — Kalite iyileştirmeleri
 
-- [ ] **4. `ProductsPage.productPrice` locator'ı fazla kırılgan**
-  - `src/pages/ProductsPage.ts:49` → `page.locator('span > span').first()`.
-  - **Çözüm**: `.product-information span span` veya text-regex.
+- [x] **4. `ProductsPage.productPrice` locator'ı fazla kırılgan** — `.product-information span span` ile scope edildi + `^Rs\.` regex filtresi eklendi. Header dropdown vb. nested span'lardan etkilenmiyor artık.
 
 - [x] **5. `ProductsPage.searchProduct()` ölü kod** — TC9 ile aktive edildi; navigation wait + case-insensitive header regex ile sağlamlaştırıldı.
 
-- [ ] **6. Ad-block init script sonsuz `setInterval`**
-  - `src/fixtures/baseTest.ts:51` — 500 ms'de bir çalışır. `MutationObserver` daha temiz. Opsiyonel.
+- [x] **6. Ad-block init script sonsuz `setInterval`** — `MutationObserver`'a çevrildi. Yeni eklenen ad/modal node'ları DOMa girer girmez siliniyor; polling overhead'i ve "kısa süreli tıklanabilir reklam" race window'u ortadan kalktı.
 
-- [ ] **7. Dil tutarsızlığı**
-  - `test.describe` başlıkları Türkçe, yorum/değişken İngilizce. Başlıkları da İngilizce'ye al.
+- [x] **7. Dil tutarsızlığı** — `products`, `categories`, `removeItemFromCart`, `register`, `negativeRegister` spec'lerindeki Türkçe `describe`/`test` başlıkları İngilizce'ye çevrildi.
 
 ### P3 — Kozmetik
 
-- [ ] **8. Dosya adlandırma**: `removeitemfromcart.spec.ts` → `removeItemFromCart.spec.ts`.
+- [x] **8. Dosya adlandırma**: `removeitemfromcart.spec.ts` → `removeItemFromCart.spec.ts` (`git mv` ile).
 - [x] **9. Kullanılmayan metod**: `LoginPage.getLoginHeader()` kaldırıldı.
-- [ ] **10. Uncommitted değişiklik**: `tests/negativeRegister.spec.ts` git status M — commit et veya geri al.
+- [x] **10. Uncommitted değişiklik**: `tests/negativeRegister.spec.ts` artık temiz (commit edilmiş).
 
 ---
 
@@ -67,14 +63,14 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 - [x] **TC12: Add Multiple Products in Cart** — `tests/multipleCart.spec.ts` yazıldı. `ProductsPage`'e `productCards`, `addProductToCartByIndex()`, `continueShopping()` eklendi. Yeşil.
 - [x] **TC14: Place Order — Register while Checkout** — `tests/registerDuringCheckout.spec.ts` yazıldı. Guest checkout → kayıt → ödeme akışı eklendi. Yeşil.
 - [x] **TC20: Search Products and Verify Cart After Login** — `tests/sessionPersistCart.spec.ts` yazıldı. Test başında server-side cart pre-cleanup (login → clear → logout), guest search + 2 ürün ekle, login, cart persistence doğrula. Set-based assertion (login sonrası merge order değişebiliyor). Yeşil 3/3.
-- [ ] **TC23: Verify Address Details in Checkout Page** — Kayıt adresi ↔ checkout adresi uyumu. Data integrity.
+- [x] **TC23: Verify Address Details in Checkout Page** — `tests/checkoutAddress.spec.ts` yazıldı. Kayıt adresi ↔ delivery/billing address karşılaştırması yapılıyor. Yeşil.
 
 ### 🟡 P2 — Önemli
 
 - [x] **TC8: Verify All Products and Product Detail Page** — `tests/products.spec.ts`'e saf TC8 testi eklendi. `allProductsHeader`, `productCondition`, `productBrand` locator'ları POM'a geldi. Eski "sepete ekleme" testindeki flake (vignette + modal kaybı) add-to-cart retry ile kapatıldı. Yeşil 6/6, sıfır retry.
 - [x] **TC15: Place Order — Register Before Checkout** — `tests/registerBeforeCheckout.spec.ts` yazıldı. Product-detail add-to-cart + `cartModal.waitFor` ile server sync + `page.goto('/view_cart')` ile flake-free. Yeşil.
 - [ ] **TC18: View Category Products** (kısmi) — Men kategorisi ve alt kategoriler de test edilmeli.
-- [ ] **TC19: View & Cart Brand Products** — Brand filtreleme + sepete ekleme.
+- [x] **TC19: View & Cart Brand Products** — `tests/brandProducts.spec.ts` yazıldı. `ProductsPage`'e `brandsSidebar`, `brandsList`, `getBrandLink()`, `getBrandHeader()`, `clickBrand()` (vignette recovery'li) eklendi. Polo + Madame doğrulaması. Yeşil.
 - [ ] **TC21: Add Review on Product** — Review submit + form validasyon + success message.
 - [ ] **TC24: Download Invoice After Purchase Order** — `page.waitForEvent('download')`.
 - [x] **TC6: Contact Us Form** — `tests/contactUs.spec.ts` yazıldı. JS Alert yönetimi (`page.on('dialog')`) ve `setInputFiles` ile dosya yükleme test edildi. Yeşil.

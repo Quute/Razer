@@ -47,13 +47,31 @@ export const test = base.extend<MyFixtures>({
             }
         });
 
-        // Inject script to hide/remove ad or consent modals at the DOM level
+        // Inject script to hide/remove ad or consent modals at the DOM level.
+        // Replaces a 500 ms setInterval sweep with a MutationObserver: nodes
+        // are removed the moment they're inserted, no polling overhead, and
+        // there's no race window where an ad is briefly clickable.
         await page.addInitScript(() => {
-            // Clear ad containers when page loads and periodically
-            setInterval(() => {
-                const adsAndModals = document.querySelectorAll('.fc-dialog-container, iframe[id^="aswift"], iframe[name^="aswift"], .adsbygoogle');
-                adsAndModals.forEach(el => el.remove());
-            }, 500); // Check and remove every half second
+            const SELECTOR = '.fc-dialog-container, iframe[id^="aswift"], iframe[name^="aswift"], .adsbygoogle';
+            const sweep = (root: ParentNode) => root.querySelectorAll(SELECTOR).forEach(el => el.remove());
+            const start = () => {
+                sweep(document);
+                new MutationObserver(mutations => {
+                    for (const m of mutations) {
+                        for (const node of m.addedNodes) {
+                            if (node.nodeType !== 1) continue;
+                            const el = node as Element;
+                            if (el.matches(SELECTOR)) el.remove();
+                            else sweep(el);
+                        }
+                    }
+                }).observe(document.documentElement, { childList: true, subtree: true });
+            };
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', start, { once: true });
+            } else {
+                start();
+            }
         });
 
         await use(page);

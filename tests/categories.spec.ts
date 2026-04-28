@@ -1,13 +1,13 @@
 import { test, expect } from '../src/fixtures/baseTest';
 
-test.describe('Kategori Menüsü Testleri', () => {
+test.describe('Category Menu Tests', () => {
 
     test.beforeEach(async ({ page }) => {
         // Navigate to the homepage before each test
         await page.goto('/');
     });
 
-    test('Women -> Dress kategorisindeki ürünlerin doğru listelendiği doğrulanmalı', async ({ homePage, page }) => {
+    test('Women -> Dress category should list dress-related products', async ({ homePage, page }) => {
         // 1. Expand the Women category and click on Dress
         await homePage.openWomenDressCategory();
 
