@@ -33,6 +33,14 @@ export class ProductsPage {
     readonly brandsSidebar: Locator;
     readonly brandsList: Locator;
 
+    // --- Review Form Elements (TC21) ---
+    readonly writeReviewTab: Locator;
+    readonly reviewNameInput: Locator;
+    readonly reviewEmailInput: Locator;
+    readonly reviewTextarea: Locator;
+    readonly submitReviewButton: Locator;
+    readonly reviewSuccessMessage: Locator;
+
     constructor(page: Page) {
         this.page = page;
 
@@ -103,6 +111,17 @@ export class ProductsPage {
         // Anchoring on href is more stable than text since the markup also
         // contains a product-count suffix like "(6)" inside the <li>.
         this.brandsList = this.brandsSidebar.locator('a[href^="/brand_products/"]');
+
+        // --- Review Form Locators (TC21) ---
+        // 'Write Your Review' tab anchor on the product detail page.
+        this.writeReviewTab = page.locator('a[href="#reviews"]');
+        // Review form inputs (raw ids — site uses #name/#email/#review).
+        this.reviewNameInput = page.locator('#name');
+        this.reviewEmailInput = page.locator('#email');
+        this.reviewTextarea = page.locator('#review');
+        this.submitReviewButton = page.locator('#button-review');
+        // Success alert rendered after submit ("Thank you for your review.").
+        this.reviewSuccessMessage = page.locator('#review-section .alert-success');
     }
 
     // 1. Navigate to products page from menu method
@@ -228,5 +247,17 @@ export class ProductsPage {
         if (this.page.url().includes('#google_vignette')) {
             await this.page.goto(`/brand_products/${brandName}`);
         }
+    }
+
+    // 12. Submit a product review on the detail page. The review block lives
+    //     below the fold and the textarea is required, so scroll into view
+    //     before filling. Returns nothing — caller asserts on
+    //     reviewSuccessMessage.
+    async submitReview(name: string, email: string, review: string) {
+        await this.writeReviewTab.scrollIntoViewIfNeeded();
+        await this.reviewNameInput.fill(name);
+        await this.reviewEmailInput.fill(email);
+        await this.reviewTextarea.fill(review);
+        await this.submitReviewButton.click();
     }
 }

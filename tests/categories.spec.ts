@@ -33,4 +33,20 @@ test.describe('Category Menu Tests', () => {
         expect(allDresses, `Tüm ürün isimlerinde "Dress" kelimesi geçmiyor. Ürünler: \n${productNames.join('\n')}`).toBeTruthy();
     });
 
+    test('TC18: Men -> Tshirts category should list products under that category', async ({ homePage, page }) => {
+        // 1. Expand the Men category and click on Tshirts
+        await homePage.openMenTshirtsCategory();
+
+        // 2. Verify URL points to /category_products/3 (Men > Tshirts)
+        await expect(page).toHaveURL(/.*category_products\/3.*/);
+
+        // 3. The category page header rendered by the site is "MEN - TSHIRTS PRODUCTS"
+        const categoryTitle = await homePage.getDisplayedCategoryTitle();
+        expect(categoryTitle.toLowerCase()).toContain('tshirts');
+
+        // 4. At least one product should be listed
+        const productNames = await homePage.getProductNames();
+        expect(productNames.length).toBeGreaterThan(0);
+    });
+
 });

@@ -69,20 +69,20 @@ automationexercise.com'da **26 resmi test case** var. Mevcut coverage:
 
 - [x] **TC8: Verify All Products and Product Detail Page** — `tests/products.spec.ts`'e saf TC8 testi eklendi. `allProductsHeader`, `productCondition`, `productBrand` locator'ları POM'a geldi. Eski "sepete ekleme" testindeki flake (vignette + modal kaybı) add-to-cart retry ile kapatıldı. Yeşil 6/6, sıfır retry.
 - [x] **TC15: Place Order — Register Before Checkout** — `tests/registerBeforeCheckout.spec.ts` yazıldı. Product-detail add-to-cart + `cartModal.waitFor` ile server sync + `page.goto('/view_cart')` ile flake-free. Yeşil.
-- [ ] **TC18: View Category Products** (kısmi) — Men kategorisi ve alt kategoriler de test edilmeli.
+- [x] **TC18: View Category Products** — `tests/categories.spec.ts`'e Men → Tshirts varyantı eklendi (`/category_products/3`). Yeşil.
 - [x] **TC19: View & Cart Brand Products** — `tests/brandProducts.spec.ts` yazıldı. `ProductsPage`'e `brandsSidebar`, `brandsList`, `getBrandLink()`, `getBrandHeader()`, `clickBrand()` (vignette recovery'li) eklendi. Polo + Madame doğrulaması. Yeşil.
-- [ ] **TC21: Add Review on Product** — Review submit + form validasyon + success message.
-- [ ] **TC24: Download Invoice After Purchase Order** — `page.waitForEvent('download')`.
+- [x] **TC21: Add Review on Product** — `tests/addReview.spec.ts` yazıldı. `ProductsPage`'e `writeReviewTab`, `reviewNameInput/Email/Textarea`, `submitReviewButton`, `reviewSuccessMessage` + `submitReview()` eklendi. "Thank you for your review." doğrulaması. Yeşil.
+- [x] **TC24: Download Invoice After Purchase Order** — `tests/downloadInvoice.spec.ts` yazıldı. `PaymentSuccessPage`'e `downloadInvoiceBtn` + `downloadInvoice()` (Promise.all + `waitForEvent('download')`) eklendi. Filename + content non-empty doğrulaması. Yeşil.
 - [x] **TC6: Contact Us Form** — `tests/contactUs.spec.ts` yazıldı. JS Alert yönetimi (`page.on('dialog')`) ve `setInputFiles` ile dosya yükleme test edildi. Yeşil.
 
 ### 🟢 P3 — Düşük
 
-- [ ] **TC10: Verify Subscription in Home Page** — Footer email subscription.
-- [ ] **TC11: Verify Subscription in Cart Page** — TC10'un cart varyantı.
-- [ ] **TC22: Add to Cart from Recommended Items** — Anasayfa recommended bölümü.
-- [ ] **TC7: Verify Test Cases Page** — Basit navigasyon.
-- [ ] **TC25: Verify Scroll Up Using Arrow Button** — UI scroll.
-- [ ] **TC26: Verify Scroll Up Without Arrow Button** — TC25'in manuel varyantı.
+- [x] **TC10: Verify Subscription in Home Page** — `tests/subscription.spec.ts` (TC10). `HomePage`'e `subscriptionEmailInput` (`#susbscribe_email` typo'lu id), `subscribeButton`, `subscriptionSuccessMessage` + `subscribe()` + `scrollToFooter()` eklendi. Yeşil.
+- [x] **TC11: Verify Subscription in Cart Page** — Aynı dosyada cart sayfası varyantı; aynı locator'lar /view_cart üzerinde de çalışıyor. Yeşil.
+- [x] **TC22: Add to Cart from Recommended Items** — `tests/recommendedItems.spec.ts`. `HomePage`'e `recommendedItemsSection`, `recommendedItemsHeader`, `recommendedAddToCartButtons` (active slide scope'lu) eklendi. Add-to-cart → modal → view cart → ürün adı doğrulama. Yeşil.
+- [x] **TC7: Verify Test Cases Page** — `tests/testCasesPage.spec.ts`. `HomePage.testCasesLink` eklendi; `/test_cases` URL + header doğrulama. Yeşil.
+- [x] **TC25: Verify Scroll Up Using Arrow Button** — `tests/scrollUp.spec.ts`. `HomePage.scrollUpButton` (`#scrollUp`), `sliderHeading` + `scrollToFooter()` eklendi. `toBeInViewport()` ile slider'a dönüş doğrulaması. Yeşil.
+- [x] **TC26: Verify Scroll Up Without Arrow Button** — Aynı dosyada `scrollToTop()` (window.scrollTo) ile arrow'a tıklamadan tepe doğrulaması. Yeşil.
 
 ---
 
